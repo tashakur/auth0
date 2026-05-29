@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to VIVID JOURNEY</title>
     <style>
-        /* 글로벌 스타일 및 메인 페이지와 동일한 폰트 세팅 */
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         
         * {
@@ -16,7 +15,9 @@
         }
 
         body {
-            background-color: #020617; /* 메인과 동일한 깊은 밤바다 색상 */
+            /* 💡 index.html과 통일감을 주기 위해 동일한 리조트 배경화면을 풀화면에 적용했어! */
+            background: linear-gradient(rgba(2, 6, 23, 0.65), rgba(2, 6, 23, 0.85)), 
+                        url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
             color: #ffffff;
             overflow: hidden;
             height: 100vh;
@@ -26,12 +27,12 @@
             position: relative;
         }
 
-        /* 메인 페이지와 통일감을 주는 휴양지 감성 오로라 배경 */
+        /* 휴양지 감성 오로라 배경 */
         .bg-glow-1 {
             position: absolute;
             width: 550px;
             height: 550px;
-            background: radial-gradient(circle, rgba(255, 117, 140, 0.25) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(255, 117, 140, 0.18) 0%, rgba(0,0,0,0) 70%);
             top: -10%;
             left: -15%;
             animation: float 14s infinite alternate ease-in-out;
@@ -41,7 +42,7 @@
             position: absolute;
             width: 650px;
             height: 650px;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.2) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, rgba(0,0,0,0) 70%);
             bottom: -15%;
             right: -15%;
             animation: float 20s infinite alternate-reverse ease-in-out;
@@ -52,15 +53,15 @@
             100% { transform: translate(50px, 60px) scale(1.1); }
         }
 
-        /* 글래스모피즘 성공 카드 (메인 페이지 로그인 창과 찰떡 링크) */
+        /* 글래스모피즘 성공 카드 */
         .welcome-card {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             padding: 60px 50px;
             border-radius: 28px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
             text-align: center;
             width: 500px;
             z-index: 10;
@@ -76,14 +77,14 @@
         .success-icon-wrap {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, rgba(0, 242, 254, 0.15) 0%, rgba(255, 117, 140, 0.15) 100%);
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2) 0%, rgba(255, 117, 140, 0.2) 100%);
+            border: 1px solid rgba(0, 242, 254, 0.4);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0 auto 30px auto;
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
         }
 
         .success-icon {
@@ -118,7 +119,7 @@
         p {
             font-size: 16px;
             line-height: 1.8;
-            color: #94a3b8;
+            color: #cbd5e1;
             margin-bottom: 8px;
             font-weight: 300;
         }
@@ -133,8 +134,8 @@
             display: inline-block;
             width: 100%;
             padding: 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 14px;
             color: #e2e8f0;
             font-size: 15px;
@@ -151,18 +152,18 @@
             border-color: transparent;
             color: #ffffff;
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 242, 254, 0.25);
+            box-shadow: 0 10px 25px rgba(0, 242, 254, 0.35);
         }
 
         .btn-dashboard:active {
             transform: translateY(0);
         }
 
-        /* 새로 추가된 프리미엄 로그아웃 버튼 스타일 */
+        /* 프리미엄 로그아웃 버튼 스타일 */
         .btn-logout {
             display: inline-block;
             margin-top: 20px;
-            color: #64748b;
+            color: #94a3b8;
             font-size: 14px;
             font-weight: 600;
             text-decoration: none;
@@ -173,7 +174,7 @@
         }
 
         .btn-logout:hover {
-            color: #ff758c; /* 호버 시 네온 핑크 포인트 */
+            color: #ff758c; 
             transform: translateY(-1px);
         }
     </style>
@@ -208,21 +209,8 @@
     </div>
 
 <script>
-    // 로그아웃 처리 함수
     function handleLogout() {
         if (confirm('VIVID JOURNEY에서 로그아웃 하시겠습니까?')) {
-            
-            // 💡 [참고] 만약 실서버 혹은 Auth0 SDK를 연동하여 사용할 경우 아래와 같이 대체할 수 있습니다.
-            /*
-            if (typeof auth0Client !== 'undefined') {
-                auth0Client.logout({
-                    logoutParams: { returnTo: window.location.origin + '/index.html' }
-                });
-                return;
-            }
-            */
-
-            // 현재 데모 환경: 첫 페이지(index.html)로 부드럽게 리다이렉션
             window.location.href = 'index.html';
         }
     }
