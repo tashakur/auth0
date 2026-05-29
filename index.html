@@ -15,7 +15,9 @@
         }
 
         body {
-            background-color: #020617;
+            /* 💡 대규야! 여기에 프리미엄 리조트 배경 이미지와 어두운 오버레이를 믹스해서 넣었어! */
+            background: linear-gradient(rgba(2, 6, 23, 0.65), rgba(2, 6, 23, 0.85)), 
+                        url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
             color: #ffffff;
             overflow: hidden;
             height: 100vh;
@@ -30,7 +32,7 @@
             position: absolute;
             width: 550px;
             height: 550px;
-            background: radial-gradient(circle, rgba(255, 117, 140, 0.3) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(255, 117, 140, 0.2) 0%, rgba(0,0,0,0) 70%);
             top: -15%;
             left: -10%;
             animation: float 14s infinite alternate ease-in-out;
@@ -40,7 +42,7 @@
             position: absolute;
             width: 650px;
             height: 650px;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.25) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, rgba(0,0,0,0) 70%);
             bottom: -20%;
             right: -10%;
             animation: float 20s infinite alternate-reverse ease-in-out;
@@ -57,13 +59,13 @@
             grid-template-columns: 1.2fr 1fr;
             width: 980px;
             height: 650px;
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 28px;
             overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
             z-index: 10;
         }
 
@@ -78,7 +80,7 @@
 
         /* 왼쪽 패널 (비주얼) */
         .left-panel {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.85));
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.65), rgba(2, 6, 23, 0.8));
             padding: 55px;
             display: flex;
             flex-direction: column;
@@ -124,7 +126,7 @@
 
         .intro-text p {
             font-size: 15px;
-            color: #94a3b8;
+            color: #cbd5e1;
             line-height: 1.7;
             z-index: 1;
             position: relative;
@@ -139,8 +141,8 @@
 
         .tag {
             padding: 6px 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 30px;
             font-size: 12px;
             color: #e2e8f0;
@@ -153,7 +155,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background: rgba(2, 6, 23, 0.2);
+            background: rgba(2, 6, 23, 0.3);
             position: relative;
         }
 
@@ -184,7 +186,7 @@
         }
 
         .form-header p {
-            color: #64748b;
+            color: #94a3b8;
             font-size: 14px;
             line-height: 1.5;
         }
@@ -197,8 +199,8 @@
         .input-container input {
             width: 100%;
             padding: 16px 16px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 14px;
             color: #fff;
             font-size: 15px;
@@ -208,8 +210,8 @@
         .input-container input:focus {
             outline: none;
             border-color: #00f2fe;
-            background: rgba(0, 242, 254, 0.01);
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
+            background: rgba(0, 242, 254, 0.02);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
         }
 
         .input-container label {
@@ -217,7 +219,7 @@
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: #475569;
+            color: #64748b;
             transition: all 0.3s;
             pointer-events: none;
             font-size: 15px;
@@ -229,7 +231,7 @@
             left: 12px;
             font-size: 12px;
             padding: 0 8px;
-            background: #040817;
+            background: #030712;
             color: #00f2fe;
             border-radius: 4px;
             font-weight: 600;
@@ -254,7 +256,7 @@
         .btn-submit:hover {
             background-position: right center;
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.4);
         }
 
         /* 하단 전환 링크 스타일 */
@@ -262,7 +264,7 @@
             margin-top: 25px;
             text-align: center;
             font-size: 14px;
-            color: #64748b;
+            color: #94a3b8;
         }
 
         .switch-link {
@@ -290,15 +292,15 @@
         }
 
         .error-toast {
-            background: rgba(239, 68, 68, 0.08);
-            border-color: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.3);
             color: #f87171;
             animation: shake 0.4s ease-in-out;
         }
 
         .success-toast {
-            background: rgba(76, 223, 135, 0.08);
-            border-color: rgba(76, 223, 135, 0.2);
+            background: rgba(76, 223, 135, 0.12);
+            border-color: rgba(76, 223, 135, 0.3);
             color: #4cdf87;
         }
 
@@ -389,14 +391,10 @@
     </div>
 
 <script>
-    // [보안 주의 주석] 본 스크립트는 프론트엔드 모킹(Mock) 데모용으로 작성되었습니다. 
-    // GitHub Secret scanning 오탐지 방지를 위해 기본 시드 계정명을 마스킹 처리하여 관리합니다.
     const MOCK_ADMIN_ID = "vivid_admin";
     const MOCK_ADMIN_PW = "vivid123!";
 
-    // 화면 전환 함수 (로그인 <-> 회원가입)
     function toggleForm(mode) {
-        // 토스트 메시지 초기화
         document.getElementById('loginError').style.display = 'none';
         document.getElementById('signupSuccess').style.display = 'none';
         document.getElementById('signupError').style.display = 'none';
@@ -410,59 +408,50 @@
         }
     }
 
-    // 1. 회원가입 처리 로직 (LocalStorage 활용)
     document.getElementById('signupForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
         const newId = document.getElementById('newUsername').value.trim();
         const newPw = document.getElementById('newPassword').value;
         
-        // 기본 제공 계정이거나 이미 가입된 아이디인지 검증
         if (newId === MOCK_ADMIN_ID || localStorage.getItem(newId)) {
             document.getElementById('signupError').style.display = 'block';
             document.getElementById('signupSuccess').style.display = 'none';
             return;
         }
         
-        // 브라우저 로컬 저장소에 계정 저장
         localStorage.setItem(newId, newPw);
         
         document.getElementById('signupError').style.display = 'none';
         const successToast = document.getElementById('signupSuccess');
         successToast.style.display = 'block';
         
-        // 폼 리셋
         document.getElementById('signupForm').reset();
         
-        // 1.5초 뒤에 부드럽게 로그인 창으로 이동시켜주는 센스
         setTimeout(() => {
             toggleForm('login');
             const usernameInput = document.getElementById('username');
             usernameInput.value = newId; 
-            // 가입 후 자동 기입 시 CSS floating label이 유지되도록 강제 reflow 유도용 더미 이벤트 트리거
             usernameInput.dispatchEvent(new Event('input', { bubbles: true }));
         }, 1500);
     });
 
-    // 2. 로그인 처리 로직
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
 
-        // 로컬 저장소에서 해당 아이디의 비밀번호 가져오기
         const savedPassword = localStorage.getItem(username);
 
-        // 하드코딩된 기본 계정이거나, 로컬스토리지에 저장된 계정이 일치하면 패스!
         if ((username === MOCK_ADMIN_ID && password === MOCK_ADMIN_PW) || (savedPassword && savedPassword === password)) {
             window.location.href = 'welcome.html';
         } else {
             const toast = document.getElementById('loginError');
             toast.style.display = 'block';
             toast.style.animation = 'none';
-            toast.offsetHeight; // Reflow 발생 유도
-            toast.style.animation = ''; // 크로스브라우징 호환성을 위해 null 대신 빈 문자열로 수정
+            toast.offsetHeight; 
+            toast.style.animation = ''; 
         }
     });
 </script>
