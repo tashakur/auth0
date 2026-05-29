@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to VIVID JOURNEY</title>
     <style>
+        /* 글로벌 스타일 및 메인 페이지와 동일한 폰트 세팅 */
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         
         * {
@@ -15,7 +16,7 @@
         }
 
         body {
-            background-color: #020617;
+            background-color: #020617; /* 메인과 동일한 깊은 밤바다 색상 */
             color: #ffffff;
             overflow: hidden;
             height: 100vh;
@@ -25,6 +26,7 @@
             position: relative;
         }
 
+        /* 메인 페이지와 통일감을 주는 휴양지 감성 오로라 배경 */
         .bg-glow-1 {
             position: absolute;
             width: 550px;
@@ -50,6 +52,7 @@
             100% { transform: translate(50px, 60px) scale(1.1); }
         }
 
+        /* 글래스모피즘 성공 카드 (메인 페이지 로그인 창과 찰떡 링크) */
         .welcome-card {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(25px);
@@ -69,6 +72,7 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
+        /* 힙한 네온 그라데이션이 적용된 성공 체크 아이콘 */
         .success-icon-wrap {
             width: 80px;
             height: 80px;
@@ -90,6 +94,7 @@
             font-weight: bold;
         }
 
+        /* 여행사 감성 타이틀 */
         h1 {
             font-size: 32px;
             font-weight: 800;
@@ -109,6 +114,7 @@
             font-weight: 600;
         }
 
+        /* 본문 멘트 */
         p {
             font-size: 16px;
             line-height: 1.8;
@@ -122,6 +128,7 @@
             font-weight: 600;
         }
 
+        /* 인터랙티브 럭셔리 버튼 */
         .btn-dashboard {
             display: inline-block;
             width: 100%;
@@ -147,18 +154,8 @@
             box-shadow: 0 10px 25px rgba(0, 242, 254, 0.25);
         }
 
-        .btn-logout {
-            display: inline-block;
-            margin-top: 20px;
-            color: #64748b;
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s;
-            cursor: pointer;
-        }
-        .btn-logout:hover {
-            color: #ff758c;
-            text-decoration: underline;
+        .btn-dashboard:active {
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -176,78 +173,15 @@
         <h1>Welcome Aboard!</h1>
         
         <div style="margin-top: 20px;">
-            <p><strong id="user-name">Guest</strong>님의 <strong>VIVID JOURNEY</strong> 멤버십 인증이 완료되었습니다.</p>
+            <p><strong>VIVID JOURNEY</strong> 멤버십 인증이 완료되었습니다.</p>
             <p>일상에서 벗어나 당신이 마주할 특별한 여정,</p>
-            <p>엄선된 프리미엄 프라이빗 큐레이션을 확인하세요. 🏝️</p>
+            <p>엄선된 프리미엄 프라이빗 큐레이션이 지금 시작됩니다. ✈️🍹</p>
         </div>
 
-        <a href="javascript:void(0);" class="btn-dashboard" onclick="alert('패키지를 불러오는 중입니다!')">
+        <a href="javascript:void(0);" class="btn-dashboard" onclick="alert('당신만을 위한 맞춤형 휴양지 리스트를 불러오는 중이야! 인트로 구현 대성공! 🏝️')">
             Explore Curated Packages
         </a>
-
-        <a href="javascript:void(0);" class="btn-logout" onclick="handleLogout()">Sign Out</a>
     </div>
-
-<script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
-<script>
-    let auth0Client = null;
-
-    function getCleanBaseUrl() {
-        let baseUrl = window.location.origin + window.location.pathname;
-        if (baseUrl.endsWith('welcome.html')) {
-            baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('welcome.html'));
-        }
-        if (!baseUrl.endsWith('/')) {
-            baseUrl += '/';
-        }
-        return baseUrl;
-    }
-
-    async function initAuth0() {
-        try {
-            const currentBase = getCleanBaseUrl();
-
-            auth0Client = await auth0.createAuth0Client({
-                domain: "turquoise-minnow-80579.cic-demo-platform.auth0app.com",
-                client_id: "s6TRyFQaibd6yCiur8pzCYFJ2CtTfWeP"
-            });
-
-            const query = window.location.search;
-            if (query.includes("code=") && query.includes("state=")) {
-                await auth0Client.handleRedirectCallback();
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-
-            const isAuthenticated = await auth0Client.isAuthenticated();
-            if (!isAuthenticated) {
-                window.location.href = currentBase + 'index.html';
-            } else {
-                const user = await auth0Client.getUser();
-                if (user) {
-                    const displayName = user.nickname || user.name || user.email.split('@')[0];
-                    document.getElementById('user-name').innerText = displayName;
-                }
-            }
-        } catch (err) {
-            console.error("Auth0 Welcome Page Error:", err);
-        }
-    }
-
-    window.onload = async () => {
-        await initAuth0();
-    };
-
-    async function handleLogout() {
-        if (auth0Client) {
-            const currentBase = getCleanBaseUrl();
-            await auth0Client.logout({
-                logoutParams: {
-                    returnTo: currentBase + "index.html"
-                }
-            });
-        }
-    }
-</script>
 
 </body>
 </html>
