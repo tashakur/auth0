@@ -3,50 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Sonatype Portal</title>
+    <title>Welcome to VIVID JOURNEY</title>
     <style>
+        /* 글로벌 스타일 및 메인 페이지와 동일한 폰트 세팅 */
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1a1a2e;
+            background-color: #020617; /* 메인과 동일한 깊은 밤바다 색상 */
             color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            position: relative;
         }
-        .welcome-container {
-            background-color: #162447;
-            padding: 50px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+
+        /* 메인 페이지와 통일감을 주는 휴양지 감성 오로라 배경 */
+        .bg-glow-1 {
+            position: absolute;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(255, 117, 140, 0.25) 0%, rgba(0,0,0,0) 70%);
+            top: -10%;
+            left: -15%;
+            animation: float 14s infinite alternate ease-in-out;
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            width: 650px;
+            height: 650px;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.2) 0%, rgba(0,0,0,0) 70%);
+            bottom: -15%;
+            right: -15%;
+            animation: float 20s infinite alternate-reverse ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 60px) scale(1.1); }
+        }
+
+        /* 글래스모피즘 성공 카드 (메인 페이지 로그인 창과 찰떡 링크) */
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 60px 50px;
+            border-radius: 28px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
-            max-width: 500px;
+            width: 500px;
+            z-index: 10;
+            animation: scaleUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        h1 {
-            color: #00d2fc;
-            margin-bottom: 20px;
+
+        @keyframes scaleUp {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
-        p {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #e2e2e2;
+
+        /* 힙한 네온 그라데이션이 적용된 성공 체크 아이콘 */
+        .success-icon-wrap {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.15) 0%, rgba(255, 117, 140, 0.15) 100%);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
         }
+
         .success-icon {
-            font-size: 50px;
-            color: #4cdf87;
-            margin-bottom: 20px;
+            font-size: 32px;
+            background: linear-gradient(to right, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        /* 여행사 감성 타이틀 */
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-sub {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00f2fe;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        /* 본문 멘트 */
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 300;
+        }
+
+        p strong {
+            color: #f8fafc;
+            font-weight: 600;
+        }
+
+        /* 인터랙티브 럭셔리 버튼 */
+        .btn-dashboard {
+            display: inline-block;
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            color: #e2e8f0;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 35px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-dashboard:hover {
+            background: linear-gradient(135deg, #00f2fe 0%, #ff758c 100%);
+            border-color: transparent;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 242, 254, 0.25);
+        }
+
+        .btn-dashboard:active {
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
 
-<div class="welcome-container">
-    <div class="success-icon">✔</div>
-    <h1>로그인 성공!</h1>
-    <p>Sonatype 저장소 전용 데모 페이지에 들어온 것을 환영해.</p>
-    <p>성공적으로 웹 호스팅이 완료되었어! 🚀</p>
-</div>
+    <!-- 배경 애니메이션 블롭 (메인과 완벽 링크) -->
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <!-- 웰컴 성공 카드 -->
+    <div class="welcome-card">
+        <div class="success-icon-wrap">
+            <span class="success-icon">✓</span>
+        </div>
+        
+        <div class="brand-sub">Verified Member</div>
+        <h1>Welcome Aboard!</h1>
+        
+        <div style="margin-top: 20px;">
+            <p><strong>VIVID JOURNEY</strong> 멤버십 인증이 완료되었습니다.</p>
+            <p>일상에서 벗어나 당신이 마주할 특별한 여정,</p>
+            <p>엄선된 프리미엄 프라이빗 큐레이션이 지금 시작됩니다. ✈️🍹</p>
+        </div>
+
+        <!-- 클릭 시 인터랙션용 더미 버튼 -->
+        <a class="btn-dashboard" onclick="alert('당신만을 위한 맞춤형 휴양지 리스트를 불러오는 중이야! 인트로 구현 대성공! 🏝️')">
+            Explore Curated Packages
+        </a>
+    </div>
 
 </body>
 </html>
