@@ -390,82 +390,57 @@
     </div>
 
 <script>
-    // [보안 주의 주석] 본 스크립트는 프론트엔드 모킹(Mock) 데모용으로 작성되었습니다. 
-    // GitHub Secret scanning 오탐지 방지를 위해 기본 시드 계정명을 마스킹 처리하여 관리합니다.
-    const MOCK_ADMIN_ID = "vivid_admin";
-    const MOCK_ADMIN_PW = "vivid123!";
+let auth0Client = null;
 
-    // 화면 전환 함수 (로그인 <-> 회원가입)
-    function toggleForm(mode) {
-        // 토스트 메시지 초기화
-        document.getElementById('loginError').style.display = 'none';
-        document.getElementById('signupSuccess').style.display = 'none';
-        document.getElementById('signupError').style.display = 'none';
+// 1. 페이지가 로드될 때 Auth0 클라이언트를 초기화합니다.
+async function initAuth0() {
+    auth0Client = await auth0.createAuth0Client({
+        domain: "YOUR_AUTH0_DOMAIN",       // 💡 1단계에서 복사한 본인의 Auth0 Domain을 넣으세요 
+        client_id: "YOUR_AUTH0_CLIENT_ID"   // 💡 1단계에서 복사한 본인의 Auth0 Client ID를 넣으세요 
+    });
+}
+
+window.onload = async () => {
+    await initAuth0();
+};
+
+// 2. Auth0 중앙 로그인 페이지로 리다이렉트시키는 함수입니다[cite: 4, 10].
+async function handleLogin(isSignUp = false) {
+    // GitHub Pages 배포 주소에 맞춰 리다이렉트될 welcome.html 경로를 유연하게 계산합니다.
+    const currentPath = window.location.pathname;
+    const redirectPage = currentPath.endsWith('index.html') 
+        ? currentPath.replace('index.html', 'welcome.html') 
+        : currentPath + (currentPath.endsWith('/') ? '' : '/') + 'welcome.html';
         
-        if (mode === 'signup') {
-            document.getElementById('loginSection').classList.remove('active');
-            document.getElementById('signupSection').classList.add('active');
-        } else {
-            document.getElementById('signupSection').classList.remove('active');
-            document.getElementById('loginSection').classList.add('active');
+    await auth0Client.loginWithRedirect({
+        authorizationParams: {
+            redirect_uri: window.location.origin + redirectPage, // 로그인 완료 후 이동할 위치 
+            screen_hint: isSignUp ? "signup" : "login"       // 회원가입 버튼일 땐 가입 탭을 먼저 띄움
         }
+    });
+}
+
+// 3. 기존의 화면 전환(글래스모피즘 폼 토글) 함수는 UI 디자인을 위해 그대로 유지합니다.
+function toggleForm(mode) {
+    if (mode === 'signup') {
+        document.getElementById('loginSection').classList.remove('active');
+        document.getElementById('signupSection').classList.add('active');
+    } else {
+        document.getElementById('signupSection').classList.remove('active');
+        document.getElementById('loginSection').classList.add('active');
     }
+}
 
-    // 1. 회원가입 처리 로직 (LocalStorage 활용)
-    document.getElementById('signupForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const newId = document.getElementById('newUsername').value.trim();
-        const newPw = document.getElementById('newPassword').value;
-        
-        // 기본 제공 계정이거나 이미 가입된 아이디인지 검증
-        if (newId === MOCK_ADMIN_ID || localStorage.getItem(newId)) {
-            document.getElementById('signupError').style.display = 'block';
-            document.getElementById('signupSuccess').style.display = 'none';
-            return;
-        }
-        
-        // 브라우저 로컬 저장소에 계정 저장
-        localStorage.setItem(newId, newPw);
-        
-        document.getElementById('signupError').style.display = 'none';
-        const successToast = document.getElementById('signupSuccess');
-        successToast.style.display = 'block';
-        
-        // 폼 리셋
-        document.getElementById('signupForm').reset();
-        
-        // 1.5초 뒤에 부드럽게 로그인 창으로 이동시켜주는 센스
-        setTimeout(() => {
-            toggleForm('login');
-            const usernameInput = document.getElementById('username');
-            usernameInput.value = newId; 
-            // 가입 후 자동 기입 시 CSS floating label이 유지되도록 강제 reflow 유도용 더미 이벤트 트리거
-            usernameInput.dispatchEvent(new Event('input', { bubbles: true }));
-        }, 1500);
-    });
+// 4. 로그인 및 회원가입 폼 제출(Submit) 이벤트가 발생하면 Auth0를 호출합니다.
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // 기본 폼 제출 동작 방지
+    handleLogin(false); // Auth0 로그인 실행
+});
 
-    // 2. 로그인 처리 로직
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
-
-        // 로컬 저장소에서 해당 아이디의 비밀번호 가져오기
-        const savedPassword = localStorage.getItem(username);
-
-        // 하드코딩된 기본 계정이거나, 로컬스토리지에 저장된 계정이 일치하면 패스!
-        if ((username === MOCK_ADMIN_ID && password === MOCK_ADMIN_PW) || (savedPassword && savedPassword === password)) {
-            window.location.href = 'welcome.html';
-        } else {
-            const toast = document.getElementById('loginError');
-            toast.style.display = 'block';
-            toast.style.animation = 'none';
-            toast.offsetHeight; // Reflow 발생 유도
-            toast.style.animation = ''; // 크로스브라우징 호환성을 위해 null 대신 빈 문자열로 수정
-        }
-    });
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // 기본 폼 제출 동작 방지
+    handleLogin(true);  // Auth0 회원가입 실행
+});
 </script>
 
 </body>
