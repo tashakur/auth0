@@ -147,10 +147,6 @@
             box-shadow: 0 10px 25px rgba(0, 242, 254, 0.25);
         }
 
-        .btn-dashboard:active {
-            transform: translateY(0);
-        }
-
         .btn-logout {
             display: inline-block;
             margin-top: 20px;
@@ -158,6 +154,7 @@
             text-decoration: none;
             font-size: 14px;
             transition: color 0.2s;
+            cursor: pointer;
         }
         .btn-logout:hover {
             color: #ff758c;
@@ -195,8 +192,21 @@
 <script>
     let auth0Client = null;
 
+    function getCleanBaseUrl() {
+        let baseUrl = window.location.origin + window.location.pathname;
+        if (baseUrl.endsWith('welcome.html')) {
+            baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('welcome.html'));
+        }
+        if (!baseUrl.endsWith('/')) {
+            baseUrl += '/';
+        }
+        return baseUrl;
+    }
+
     async function initAuth0() {
         try {
+            const currentBase = getCleanBaseUrl();
+
             auth0Client = await auth0.createAuth0Client({
                 domain: "turquoise-minnow-80579.cic-demo-platform.auth0app.com",
                 client_id: "s6TRyFQaibd6yCiur8pzCYFJ2CtTfWeP"
@@ -210,7 +220,7 @@
 
             const isAuthenticated = await auth0Client.isAuthenticated();
             if (!isAuthenticated) {
-                window.location.href = 'index.html';
+                window.location.href = currentBase + 'index.html';
             } else {
                 const user = await auth0Client.getUser();
                 if (user) {
@@ -219,7 +229,7 @@
                 }
             }
         } catch (err) {
-            console.error("Auth0 welcome initialization failed:", err);
+            console.error("Auth0 Welcome Page Error:", err);
         }
     }
 
@@ -229,9 +239,10 @@
 
     async function handleLogout() {
         if (auth0Client) {
+            const currentBase = getCleanBaseUrl();
             await auth0Client.logout({
                 logoutParams: {
-                    returnTo: window.location.origin + window.location.pathname.replace("welcome.html", "") + "index.html"
+                    returnTo: currentBase + "index.html"
                 }
             });
         }
