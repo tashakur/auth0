@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DK TRAVEL - Premium Travel Curation</title>
+    <title>VIVID JOURNEY - Premium Travel Curation</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         
@@ -76,7 +76,7 @@
             .left-panel { display: none; }
         }
 
-        /* 왼쪽 패널 (비주얼) */
+        /* 오른쪽 패널 (양식 영역) */
         .left-panel {
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.85));
             padding: 55px;
@@ -278,37 +278,7 @@
             color: #ff758c;
             text-decoration: underline;
         }
-
-        .error-toast, .success-toast {
-            border: 1px solid;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 14px;
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }
-
-        .error-toast {
-            background: rgba(239, 68, 68, 0.08);
-            border-color: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            animation: shake 0.4s ease-in-out;
-        }
-
-        .success-toast {
-            background: rgba(76, 223, 135, 0.08);
-            border-color: rgba(76, 223, 135, 0.2);
-            color: #4cdf87;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-6px); }
-            75% { transform: translateX(6px); }
-        }
     </style>
-    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 </head>
 <body>
 
@@ -344,8 +314,8 @@
                         <label>ID / Username</label>
                     </div>
                     <div class="input-container">
-                        <input type="password" id="password" required>
-                        <label>Password</label>
+                        <input type="password" id="password">
+                        <label>Password (Auth0 Page)</label>
                     </div>
                     <button type="submit" class="btn-submit">Explore Your Journey</button>
                 </form>
@@ -353,27 +323,18 @@
                 <div class="switch-mode-container">
                     아직 회원이 아니신가요? <a href="javascript:void(0);" class="switch-link" onclick="toggleForm('signup')">Sign Up</a>
                 </div>
-                <div id="loginError" class="error-toast">🔒 인증 정보가 올바르지 않습니다. 다시 확인해 주세요.</div>
             </div>
 
             <div id="signupSection" class="form-section">
                 <div class="form-header">
                     <h2>Create Account</h2>
-                    <p>DK TRAVEL의 멤버가 되어<br>특별한 웰컴 혜택과 프라이빗 큐레이션을 누려보세요.</p>
+                    <p>VIVID JOURNEY의 멤버가 되어<br>특별한 웰컴 혜택과 프라이빗 큐레이션을 누려보세요.</p>
                 </div>
 
                 <form id="signupForm">
                     <div class="input-container">
-                        <input type="text" id="newUsername" required autocomplete="off">
-                        <label>Choose ID</label>
-                    </div>
-                    <div class="input-container">
                         <input type="email" id="newEmail" required autocomplete="off">
                         <label>Email Address</label>
-                    </div>
-                    <div class="input-container">
-                        <input type="password" id="newPassword" required>
-                        <label>Password</label>
                     </div>
                     <button type="submit" class="btn-submit">Join Membership</button>
                 </form>
@@ -381,67 +342,8 @@
                 <div class="switch-mode-container">
                     이미 계정이 있으신가요? <a href="javascript:void(0);" class="switch-link" onclick="toggleForm('login')">Sign In</a>
                 </div>
-                <div id="signupSuccess" class="success-toast">🎉 회원가입 성공! 이제 로그인할 수 있어.</div>
-                <div id="signupError" class="error-toast">⚠️ 이미 존재하는 아이디야! 다른 ID를 사용해줘.</div>
             </div>
 
         </div>
 
     </div>
-
-<script>
-let auth0Client = null;
-
-// 1. 페이지가 로드될 때 Auth0 클라이언트를 초기화합니다.
-async function initAuth0() {
-    auth0Client = await auth0.createAuth0Client({
-        domain: "YOUR_AUTH0_DOMAIN",       // 💡 1단계에서 복사한 본인의 Auth0 Domain을 넣으세요 
-        client_id: "YOUR_AUTH0_CLIENT_ID"   // 💡 1단계에서 복사한 본인의 Auth0 Client ID를 넣으세요 
-    });
-}
-
-window.onload = async () => {
-    await initAuth0();
-};
-
-// 2. Auth0 중앙 로그인 페이지로 리다이렉트시키는 함수입니다[cite: 4, 10].
-async function handleLogin(isSignUp = false) {
-    // GitHub Pages 배포 주소에 맞춰 리다이렉트될 welcome.html 경로를 유연하게 계산합니다.
-    const currentPath = window.location.pathname;
-    const redirectPage = currentPath.endsWith('index.html') 
-        ? currentPath.replace('index.html', 'welcome.html') 
-        : currentPath + (currentPath.endsWith('/') ? '' : '/') + 'welcome.html';
-        
-    await auth0Client.loginWithRedirect({
-        authorizationParams: {
-            redirect_uri: window.location.origin + redirectPage, // 로그인 완료 후 이동할 위치 
-            screen_hint: isSignUp ? "signup" : "login"       // 회원가입 버튼일 땐 가입 탭을 먼저 띄움
-        }
-    });
-}
-
-// 3. 기존의 화면 전환(글래스모피즘 폼 토글) 함수는 UI 디자인을 위해 그대로 유지합니다.
-function toggleForm(mode) {
-    if (mode === 'signup') {
-        document.getElementById('loginSection').classList.remove('active');
-        document.getElementById('signupSection').classList.add('active');
-    } else {
-        document.getElementById('signupSection').classList.remove('active');
-        document.getElementById('loginSection').classList.add('active');
-    }
-}
-
-// 4. 로그인 및 회원가입 폼 제출(Submit) 이벤트가 발생하면 Auth0를 호출합니다.
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // 기본 폼 제출 동작 방지
-    handleLogin(false); // Auth0 로그인 실행
-});
-
-document.getElementById('signupForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // 기본 폼 제출 동작 방지
-    handleLogin(true);  // Auth0 회원가입 실행
-});
-</script>
-
-</body>
-</html>
