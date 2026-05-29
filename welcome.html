@@ -157,6 +157,25 @@
         .btn-dashboard:active {
             transform: translateY(0);
         }
+
+        /* 새로 추가된 프리미엄 로그아웃 버튼 스타일 */
+        .btn-logout {
+            display: inline-block;
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.2s;
+        }
+
+        .btn-logout:hover {
+            color: #ff758c; /* 호버 시 네온 핑크 포인트 */
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
@@ -181,7 +200,33 @@
         <a href="javascript:void(0);" class="btn-dashboard" onclick="alert('당신만을 위한 맞춤형 휴양지 리스트를 불러오는 중이야! 인트로 구현 대성공! 🏝️')">
             Explore Curated Packages
         </a>
+
+        <br>
+        <a href="javascript:void(0);" class="btn-logout" onclick="handleLogout()">
+            Sign Out / Logout
+        </a>
     </div>
+
+<script>
+    // 로그아웃 처리 함수
+    function handleLogout() {
+        if (confirm('VIVID JOURNEY에서 로그아웃 하시겠습니까?')) {
+            
+            // 💡 [참고] 만약 실서버 혹은 Auth0 SDK를 연동하여 사용할 경우 아래와 같이 대체할 수 있습니다.
+            /*
+            if (typeof auth0Client !== 'undefined') {
+                auth0Client.logout({
+                    logoutParams: { returnTo: window.location.origin + '/index.html' }
+                });
+                return;
+            }
+            */
+
+            // 현재 데모 환경: 첫 페이지(index.html)로 부드럽게 리다이렉션
+            window.location.href = 'index.html';
+        }
+    }
+</script>
 
 </body>
 </html>
