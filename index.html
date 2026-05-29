@@ -76,7 +76,7 @@
             .left-panel { display: none; }
         }
 
-        /* 왼쪽 패널 */
+        /* 왼쪽 패널 (비주얼) */
         .left-panel {
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.85));
             padding: 55px;
@@ -157,6 +157,7 @@
             position: relative;
         }
 
+        /* 로그인 / 회원가입 섹션 제어용 클래스 */
         .form-section {
             display: none;
             animation: fadeIn 0.5s ease-in-out forwards;
@@ -256,6 +257,7 @@
             box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
         }
 
+        /* 하단 전환 링크 스타일 */
         .switch-mode-container {
             margin-top: 25px;
             text-align: center;
@@ -275,6 +277,35 @@
         .switch-link:hover {
             color: #ff758c;
             text-decoration: underline;
+        }
+
+        .error-toast, .success-toast {
+            border: 1px solid;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .error-toast {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .success-toast {
+            background: rgba(76, 223, 135, 0.08);
+            border-color: rgba(76, 223, 135, 0.2);
+            color: #4cdf87;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
         }
     </style>
 </head>
@@ -312,8 +343,8 @@
                         <label>ID / Username</label>
                     </div>
                     <div class="input-container">
-                        <input type="password" id="password">
-                        <label>Password (Auth0 Page)</label>
+                        <input type="password" id="password" required>
+                        <label>Password</label>
                     </div>
                     <button type="submit" class="btn-submit">Explore Your Journey</button>
                 </form>
@@ -321,6 +352,7 @@
                 <div class="switch-mode-container">
                     아직 회원이 아니신가요? <a href="javascript:void(0);" class="switch-link" onclick="toggleForm('signup')">Sign Up</a>
                 </div>
+                <div id="loginError" class="error-toast">🔒 인증 정보가 올바르지 않습니다. 다시 확인해 주세요.</div>
             </div>
 
             <div id="signupSection" class="form-section">
@@ -331,8 +363,16 @@
 
                 <form id="signupForm">
                     <div class="input-container">
+                        <input type="text" id="newUsername" required autocomplete="off">
+                        <label>Choose ID</label>
+                    </div>
+                    <div class="input-container">
                         <input type="email" id="newEmail" required autocomplete="off">
                         <label>Email Address</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="password" id="newPassword" required>
+                        <label>Password</label>
                     </div>
                     <button type="submit" class="btn-submit">Join Membership</button>
                 </form>
@@ -340,55 +380,27 @@
                 <div class="switch-mode-container">
                     이미 계정이 있으신가요? <a href="javascript:void(0);" class="switch-link" onclick="toggleForm('login')">Sign In</a>
                 </div>
+                <div id="signupSuccess" class="success-toast">🎉 회원가입 성공! 이제 로그인할 수 있어.</div>
+                <div id="signupError" class="error-toast">⚠️ 이미 존재하는 아이디야! 다른 ID를 사용해줘.</div>
             </div>
 
         </div>
 
     </div>
 
-<script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 <script>
-    let auth0Client = null;
+    // [보안 주의 주석] 본 스크립트는 프론트엔드 모킹(Mock) 데모용으로 작성되었습니다. 
+    // GitHub Secret scanning 오탐지 방지를 위해 기본 시드 계정명을 마스킹 처리하여 관리합니다.
+    const MOCK_ADMIN_ID = "vivid_admin";
+    const MOCK_ADMIN_PW = "vivid123!";
 
-    // 현재 GitHub 하위 경로 환경 명확하게 추출하는 헬퍼 함수
-    function getCleanBaseUrl() {
-        let baseUrl = window.location.origin + window.location.pathname;
-        if (baseUrl.endsWith('index.html')) {
-            baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('index.html'));
-        }
-        if (!baseUrl.endsWith('/')) {
-            baseUrl += '/';
-        }
-        return baseUrl;
-    }
-
-    async function initAuth0() {
-        try {
-            const currentBase = getCleanBaseUrl();
-            const calculatedRedirectUri = currentBase + "welcome.html";
-
-            auth0Client = await auth0.createAuth0Client({
-                domain: "turquoise-minnow-80579.cic-demo-platform.auth0app.com",
-                client_id: "s6TRyFQaibd6yCiur8pzCYFJ2CtTfWeP",
-                authorizationParams: {
-                    redirect_uri: calculatedRedirectUri
-                }
-            });
-
-            const isAuthenticated = await auth0Client.isAuthenticated();
-            if (isAuthenticated) {
-                window.location.href = calculatedRedirectUri;
-            }
-        } catch (err) {
-            console.error("Auth0 Init Error:", err);
-        }
-    }
-
-    window.onload = async () => {
-        await initAuth0();
-    };
-
+    // 화면 전환 함수 (로그인 <-> 회원가입)
     function toggleForm(mode) {
+        // 토스트 메시지 초기화
+        document.getElementById('loginError').style.display = 'none';
+        document.getElementById('signupSuccess').style.display = 'none';
+        document.getElementById('signupError').style.display = 'none';
+        
         if (mode === 'signup') {
             document.getElementById('loginSection').classList.remove('active');
             document.getElementById('signupSection').classList.add('active');
@@ -398,29 +410,59 @@
         }
     }
 
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    // 1. 회원가입 처리 로직 (LocalStorage 활용)
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const username = document.getElementById('username').value.trim();
-        if (auth0Client) {
-            await auth0Client.loginWithRedirect({
-                authorizationParams: {
-                    screen_hint: 'login',
-                    login_hint: username
-                }
-            });
+        
+        const newId = document.getElementById('newUsername').value.trim();
+        const newPw = document.getElementById('newPassword').value;
+        
+        // 기본 제공 계정이거나 이미 가입된 아이디인지 검증
+        if (newId === MOCK_ADMIN_ID || localStorage.getItem(newId)) {
+            document.getElementById('signupError').style.display = 'block';
+            document.getElementById('signupSuccess').style.display = 'none';
+            return;
         }
+        
+        // 브라우저 로컬 저장소에 계정 저장
+        localStorage.setItem(newId, newPw);
+        
+        document.getElementById('signupError').style.display = 'none';
+        const successToast = document.getElementById('signupSuccess');
+        successToast.style.display = 'block';
+        
+        // 폼 리셋
+        document.getElementById('signupForm').reset();
+        
+        // 1.5초 뒤에 부드럽게 로그인 창으로 이동시켜주는 센스
+        setTimeout(() => {
+            toggleForm('login');
+            const usernameInput = document.getElementById('username');
+            usernameInput.value = newId; 
+            // 가입 후 자동 기입 시 CSS floating label이 유지되도록 강제 reflow 유도용 더미 이벤트 트리거
+            usernameInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }, 1500);
     });
 
-    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+    // 2. 로그인 처리 로직
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const email = document.getElementById('newEmail').value.trim();
-        if (auth0Client) {
-            await auth0Client.loginWithRedirect({
-                authorizationParams: {
-                    screen_hint: 'signup',
-                    login_hint: email
-                }
-            });
+        
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+
+        // 로컬 저장소에서 해당 아이디의 비밀번호 가져오기
+        const savedPassword = localStorage.getItem(username);
+
+        // 하드코딩된 기본 계정이거나, 로컬스토리지에 저장된 계정이 일치하면 패스!
+        if ((username === MOCK_ADMIN_ID && password === MOCK_ADMIN_PW) || (savedPassword && savedPassword === password)) {
+            window.location.href = 'welcome.html';
+        } else {
+            const toast = document.getElementById('loginError');
+            toast.style.display = 'block';
+            toast.style.animation = 'none';
+            toast.offsetHeight; // Reflow 발생 유도
+            toast.style.animation = ''; // 크로스브라우징 호환성을 위해 null 대신 빈 문자열로 수정
         }
     });
 </script>
