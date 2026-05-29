@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to DK Travel</title>
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
     <style>
         /* 글로벌 스타일 및 메인 페이지와 동일한 폰트 세팅 */
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
@@ -140,7 +141,7 @@
             font-size: 15px;
             font-weight: 600;
             text-decoration: none;
-            margin-top: 35px;
+            margin-top: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             letter-spacing: 0.5px;
@@ -157,6 +158,22 @@
         .btn-dashboard:active {
             transform: translateY(0);
         }
+
+        /* 로그아웃 버튼 스타일 추가 */
+        .btn-logout {
+            display: inline-block;
+            margin-top: 15px;
+            background: transparent;
+            border: none;
+            color: #64748b;
+            font-size: 13px;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .btn-logout:hover {
+            color: #ef4444;
+        }
     </style>
 </head>
 <body>
@@ -170,7 +187,7 @@
         </div>
         
         <div class="brand-sub">Verified Member</div>
-        <h1>Welcome Aboard!</h1>
+        <h1 id="welcomeTitle">Welcome Aboard!</h1>
         
         <div style="margin-top: 20px;">
             <p><strong>DK Travel</strong> 멤버십 인증이 완료되었습니다.</p>
@@ -181,7 +198,73 @@
         <a href="javascript:void(0);" class="btn-dashboard" onclick="alert('당신만을 위한 맞춤형 휴양지 리스트를 확인하세요! 🏝️')">
             Explore Curated Packages
         </a>
+
+        <button class="btn-logout" onclick="logout()">Log Out</button>
     </div>
 
+    <script>
+    let auth0Client = null;
+
+    // 1. Auth0 객체 초기화 및 주소창 토큰 유효성 검사 수행
+    async function initAuth0() {
+        auth0Client = await auth0.createAuth0Client({
+            domain: "YOUR_AUTH0_DOMAIN",       // 💡 본인의 Auth0 Domain 값으로 교체하세요
+            client_id: "YOUR_AUTH0_CLIENT_ID"   // 💡 본인의 Auth0 Client ID 값으로 교체하세요
+        });
+
+        const query = window.location.search;
+        
+        // Auth0 로그인 페이지로부터 리다이렉트되어 돌아왔을 때 주소창 파라미터(?code=...&state=...) 처리
+        if (query.includes("code=") && query.includes("state=")) {
+            try {
+                // 토큰 교환 작업 완료
+                await auth0Client.handleRedirectCallback();
+                // 주소창의 복잡한 쿼리 스트링 문자열을 브라우저 히스토리에서 말끔하게 제거
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } catch (err) {
+                console.error("인증 핸들러 콜백 처리 중 오류 발생:", err);
+            }
+        }
+
+        // 2. 사용자가 현재 브라우저 세션에 안전하게 로그인되었는지 최종 체크
+        const isAuthenticated = await auth0Client.isAuthenticated();
+
+        if (isAuthenticated) {
+            // 로그인 인증 성공 시 Auth0 유저 프로필 데이터 수신
+            const user = await auth0Client.getUser();
+            console.log("Logged-in User Info:", user);
+            
+            // h1 웰컴 메세지 타이틀에 동적으로 유저의 닉네임(또는 이름) 반영!
+            const welcomeTitle = document.getElementById('welcomeTitle');
+            if (welcomeTitle) {
+                welcomeTitle.innerText = `Welcome, ${user.nickname || 'Member'}!`;
+            }
+        } else {
+            // 로그인 데이터 없이 다이렉트로 welcome.html 경로를 입력하고 강제 불법 진입한 유저 추방
+            alert("정상적인 인증 정보가 없습니다. 메인 로그인 페이지로 이동합니다.");
+            window.location.href = 'index.html';
+        }
+    }
+
+    // 브라우저 화면이 준비되면 Auth0 초기화 로직 실행
+    window.onload = async () => {
+        await initAuth0();
+    };
+
+    // 3. 로그아웃 기능 구현 함수
+    async function logout() {
+        const currentPath = window.location.pathname;
+        const logoutPage = currentPath.endsWith('welcome.html')
+            ? currentPath.replace('welcome.html', 'index.html')
+            : currentPath.substring(0, currentPath.lastIndexOf('/')) + '/index.html';
+
+        await auth0Client.logout({
+            logoutParams: {
+                // 로그아웃 절차 종료 후 브라우저가 복귀할 메인 인덱스 페이지 URL 설정
+                returnTo: window.location.origin + logoutPage
+            }
+        });
+    }
+    </script>
 </body>
 </html>
